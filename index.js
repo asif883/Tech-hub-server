@@ -183,7 +183,50 @@ const client = new MongoClient(uri, {
     const result = await CartCollection.find(query).toArray()
     res.send(result)
   })
+  // find wish list 
+  app.get('/list/:email' , async (req , res) =>{
+    const email= req.params.email
+    const query = {buyerEmail: email}
+    const result = await wishListCollection.find(query).toArray()
+    res.send(result)
+  })
+  // find product by email
+  app.get('/my-product/:email', async (req , res) =>{
+    const email= req.params.email
+    const query = {sellerEmail: email}
+    const result = await productCollection.find(query).toArray()
+    res.send(result)
+  })
   
+  // delete product 
+  app.delete('/added-product/:id', async(req , res)=>{
+    const id = req.params.id;
+    const query = {_id : new ObjectId(id)}
+    const result = await productCollection.deleteOne(query);
+    res.send(result);
+  })
+
+   // Update
+   app.patch('/updateProduct/:id',async (req, res)=>{
+    const id =req.params.id;
+    const filter= {_id: new ObjectId(id)};
+    const options ={upsert: true};
+    const updateProduct = req.body
+    const update ={
+      $set:{
+        title:updateProduct.title,
+        brand:updateProduct.brand,
+        price:updateProduct.price,
+        inStock:updateProduct.inStock, 
+        imageURL:updateProduct.imageURL,
+        description:updateProduct.description, 
+        category:updateProduct.category, 
+      }
+    }
+    const result =await productCollection.updateOne(filter,update,options);
+    res.send(result)
+  })
+
         
 
     }
