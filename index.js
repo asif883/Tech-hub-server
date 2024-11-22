@@ -11,7 +11,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 app.use(cors({
     origin:[ 
       'http://localhost:5173',
-      "https://tech-hub-7f6cd.web.app"
+      "https://last-project-psi.vercel.app"
     ],
     optionsSuccessStatus: 200
   }))
