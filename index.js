@@ -72,7 +72,7 @@ const client = new MongoClient(uri, {
 
   const dbConnect =async ()=>{
     try{
-      await  client.connect();
+      // await  client.connect();
       console.log('DB connected')
 
    // insert Users
