@@ -63,6 +63,8 @@ const client = new MongoClient(uri, {
 
   const userCollection = client.db('tech-hub').collection('users')
   const productCollection = client.db('tech-hub').collection('products')
+  const CartCollection = client.db('tech-hub').collection('carts')
+  const wishListCollection = client.db('tech-hub').collection('wish-List')
 
 
   const dbConnect =async ()=>{
@@ -151,6 +153,36 @@ const client = new MongoClient(uri, {
   
         res.send({products, brands, categories, totalProduct})
       })
+
+    // find product by id
+    app.get('/product/:id', async(req , res) =>{
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)}
+      const product = await productCollection.findOne(query);
+      res.send(product)
+  })
+
+  // add to cart 
+  app.post('/cart' , async( req , res) =>{
+      const cartData = req.body
+      const result = await CartCollection.insertOne(cartData)
+      res.send(result)
+  })
+  // add to wishList 
+  app.post('/wishList' , async( req , res) =>{
+      const listData = req.body
+      const result = await wishListCollection.insertOne(listData)
+      res.send(result)
+  })
+
+
+  // find cart 
+  app.get('/cart/:email' , async (req , res) =>{
+    const email= req.params.email
+    const query = {buyerEmail: email}
+    const result = await CartCollection.find(query).toArray()
+    res.send(result)
+  })
   
         
 
